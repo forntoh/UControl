@@ -8,8 +8,8 @@ package ucontrol;
 import Objects.Screen;
 import client.connect.MakeConnection;
 import client.handlers.*;
-import client.iInterfaces.OnChangeScreenListener;
-import client.iInterfaces.OnMouseMoveListener;
+import client.interfaces.OnChangeScreenListener;
+import client.interfaces.OnMouseMoveListener;
 
 import java.awt.AWTException;
 
@@ -31,8 +31,6 @@ import static java.lang.Thread.sleep;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.security.SecureRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,7 +47,7 @@ import ipaddress.GetMyIpAddress;
 import static utilities.ValidateIP.validateIP;
 import static utilities.ValidateIP.validatePort;
 
-import server.sever.Server;
+import server.Server;
 import utilities.TextLengthChecker;
 import utilities.TextPrompt;
 
@@ -146,15 +144,19 @@ public class MainGUI extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_connectMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_connectMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_connectMouseExited(evt);
             }
+
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btn_connectMousePressed(evt);
             }
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 btn_connectMouseReleased(evt);
             }
@@ -199,9 +201,11 @@ public class MainGUI extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_minMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_minMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_minMouseExited(evt);
             }
@@ -217,9 +221,11 @@ public class MainGUI extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_closeMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_closeMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_closeMouseExited(evt);
             }
@@ -248,12 +254,15 @@ public class MainGUI extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_resetMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_resetMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_resetMouseExited(evt);
             }
+
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btn_resetMousePressed(evt);
             }
@@ -265,15 +274,19 @@ public class MainGUI extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btn_startMouseClicked(evt);
             }
+
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn_startMouseEntered(evt);
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn_startMouseExited(evt);
             }
+
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 btn_startMousePressed(evt);
             }
+
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 btn_startMouseReleased(evt);
             }
@@ -286,12 +299,12 @@ public class MainGUI extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -388,26 +401,13 @@ public class MainGUI extends javax.swing.JFrame {
     private void resetButtonActionPerformed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
         try {
-            if (serverSocket != null) {
-                serverSocket.close();
-            }
-            if (clientSocket != null) {
-                clientSocket.close();
-            }
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (outputStream != null) {
-                outputStream.close();
-            }
-            if (objectOutputStream != null) {
-                objectOutputStream.close();
-            }
-            if (objectInputStream != null) {
-                objectInputStream.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            serverSocket.close();
+            clientSocket.close();
+            inputStream.close();
+            outputStream.close();
+            objectOutputStream.close();
+            objectInputStream.close();
+        } catch (Exception ignored) {
         }
     }//GEN-LAST:event_resetButtonActionPerformed
 
@@ -442,15 +442,16 @@ public class MainGUI extends javax.swing.JFrame {
         else {
             MakeConnection makeConnection = new MakeConnection(ipAddressField.getText(), portField.getText());
             clientSocket = makeConnection.doInBackground();
-            //while (clientSocket == null) {
-                clientSocket = makeConnection.doInBackground();
-                delayChangeStatus("Server is not listening", preStatus);
-           // }
+            delayChangeStatus("Server is not listening", preStatus);
+            // }
             connectionStatusLabel.setText("Connected");
             new Thread(() -> {
                 while (true) {
                     try {
-                        String message = (String) objectInputStream.readObject();
+                        System.out.println("Communicating");
+                        Object object = objectInputStream.readObject();
+                        System.out.println(object.toString());
+                        String message = (String) object;
                         if (message != null) {
                             switch (message) {
                                 case "SCREEN_DIMENSIONS":
@@ -542,29 +543,29 @@ public class MainGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, message);
     }
 
-        private void setConnectionDetails() {
-            String ipAddresses[] = new GetMyIpAddress().ipAddress();
-            String connectionStatus = "Not Connected";
-            port = new GetFreePort().getFreePort();
-            String ipAddress = ipAddresses[0];
-            if (ipAddresses[1] != null) {
-                ipAddress = ipAddress + " | " + ipAddresses[1];
-            }
-            ipAddressLabel.setText(ipAddress);
-            portNumberLabel.setText(Integer.toString(port));
-            connectionStatusLabel.setText(connectionStatus);
-            if (ipAddresses[0].equals("127.0.0.1")) {
-                showDialogMessage("Connect your PC to Android phone hotspot or connect both devices to a local network.");
-            } else {
-                try {
-                    serverSocket = new ServerSocket(port);
-                    startServer();
-                } catch (Exception e) {
-                    showDialogMessage("Error in initializing server");
-                    e.printStackTrace();
-                }
+    private void setConnectionDetails() {
+        String ipAddresses[] = new GetMyIpAddress().ipAddress();
+        String connectionStatus = "Not Connected";
+        port = new GetFreePort().getFreePort();
+        String ipAddress = ipAddresses[0];
+        if (ipAddresses[1] != null) {
+            ipAddress = ipAddress + " | " + ipAddresses[1];
+        }
+        ipAddressLabel.setText(ipAddress);
+        portNumberLabel.setText(Integer.toString(port));
+        connectionStatusLabel.setText(connectionStatus);
+        if (ipAddresses[0].equals("127.0.0.1")) {
+            showDialogMessage("Connect your PC to Android phone hotspot or connect both devices to a local network.");
+        } else {
+            try {
+                serverSocket = new ServerSocket(port);
+                startServer();
+            } catch (Exception e) {
+                showDialogMessage("Error in initializing server");
+                e.printStackTrace();
             }
         }
+    }
 
     private void startServer() {
         new Thread(() -> new Server().connect(btn_reset, connectionStatusLabel)).start();
@@ -599,15 +600,11 @@ public class MainGUI extends javax.swing.JFrame {
     //Used to close socket connections
     private static void socketException() {
         System.out.println("Connection Closed");
-        if (clientSocket != null) {
-            try {
-                clientSocket.close();
-                objectOutputStream.close();
-                clientSocket = null;
-            } catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        }
+        try {
+            clientSocket.close();
+            objectOutputStream.close();
+            clientSocket = null;
+        } catch (Exception ignored) {}
     }
 
     //Called after RemoteScreen is selected and mouse is moved on RemoteScreen
@@ -670,7 +667,7 @@ public class MainGUI extends javax.swing.JFrame {
     }
 
     //Initialize local PC Overlay frame
-    private static void initializeOverlayFrame() {
+    private void initializeOverlayFrame() {
         frame = new JFrame();
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setUndecorated(true);
@@ -684,7 +681,7 @@ public class MainGUI extends javax.swing.JFrame {
         frame.getContentPane().setCursor(blankCursor);
         frame.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.4f));
 
-        JLabel jLabel1 = new JLabel("Controlling: 192.168.1.9", SwingConstants.CENTER);
+        JLabel jLabel1 = new JLabel("Controlling: " + ipAddressField.getText(), SwingConstants.CENTER);
         jLabel1.setFont(new java.awt.Font("Montserrat Light", 0, 62));
         jLabel1.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.3f));
         jLabel1.setForeground(new Color(1f, 1f, 1f, 1f));

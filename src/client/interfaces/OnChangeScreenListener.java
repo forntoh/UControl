@@ -1,4 +1,4 @@
-package client.iInterfaces;
+package client.interfaces;
 
 /**
  * Created by Forntoh on 26-Jun-17.

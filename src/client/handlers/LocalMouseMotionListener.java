@@ -1,7 +1,7 @@
 package client.handlers;
 
 import Objects.Screen;
-import client.iInterfaces.OnChangeScreenListener;
+import client.interfaces.OnChangeScreenListener;
 
 import java.awt.event.MouseEvent;
 
