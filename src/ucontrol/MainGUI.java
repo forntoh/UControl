@@ -401,14 +401,13 @@ public class MainGUI extends javax.swing.JFrame {
     private void resetButtonActionPerformed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
         // TODO add your handling code here:
         try {
-            serverSocket.close();
-            clientSocket.close();
-            inputStream.close();
-            outputStream.close();
-            objectOutputStream.close();
-            objectInputStream.close();
-        } catch (Exception ignored) {
-        }
+            if (serverSocket != null) serverSocket.close();
+            if (clientSocket != null) clientSocket.close();
+            if (inputStream != null) inputStream.close();
+            if (outputStream != null) outputStream.close();
+            if (objectOutputStream != null) objectOutputStream.close();
+            if (objectInputStream != null) objectInputStream.close();
+        } catch (Exception ignored) {}
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void btn_connectMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_connectMouseEntered
@@ -604,7 +603,8 @@ public class MainGUI extends javax.swing.JFrame {
             clientSocket.close();
             objectOutputStream.close();
             clientSocket = null;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     //Called after RemoteScreen is selected and mouse is moved on RemoteScreen

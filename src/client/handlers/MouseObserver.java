@@ -15,7 +15,7 @@ public class MouseObserver {
 
     private Component component;
     private Timer timer;
-    private final Set<MouseMotionListener> mouseMotionListeners;
+    private final Set<MouseMotionListener> mouseMotionListeners = new HashSet<>();
 
     public MouseObserver(Component component) {
         if (component == null) {
@@ -39,7 +39,6 @@ public class MouseObserver {
                 lastPoint = point;
             }
         });
-        mouseMotionListeners = new HashSet<>();
     }
 
     public void start() {
