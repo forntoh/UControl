@@ -54,7 +54,7 @@ NetBeans IDE
 
 ## Testing
 There are two possible ways to test the App: 
-- Install `UCControl-setup.exe` on both the client and server machine.
+- Rename the file `UControl-setup` to `UControl-setup.exe` and install it on both the client and server machine.
 - Build the mirrored repository using NetBeans IDE on both machines.
 
 ## Built with
